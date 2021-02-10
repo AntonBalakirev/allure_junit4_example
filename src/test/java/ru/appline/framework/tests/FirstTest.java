@@ -1,22 +1,27 @@
 package ru.appline.framework.tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import ru.appline.framework.basetestsclass.BaseTests;
 
 public class FirstTest extends BaseTests {
 
-    @Test
+    @Test()
+    @DisplayName("Оформление программы страхования для путешественников")
+    @Description("Демонстрационный e2e сценарий")
     public void startTest() {
         app.getStartPage()
                 .selectBaseMenu("Страхование")
-                .selectSubMenu("СберСтрахование")
-                .selectInsuranceProgram("Страхование путешественников")
+                .selectSubMenu("Перейти в каталог")
+                .checkOpenPage("Оформить страховку в СберБанке — СберБанк")
+                .selectInsuranceProgram("Страхование для путешественников")
+                .clickCheckoutButton()
                 .checkOpenPage("Страхование путешественников")
-                .clickBtnOformitOnline()
-                .selectTarifMin()
-                .clickBtnOformit()
+                .selectCoverage("Минимальная")
+                .clickCheckoutButton()
                 .fillField("Застрахованные - Фамилия", "Privet")
-                .fillField("Застрахованные - Имя", "Chuvak")
+                .fillField("Застрахованные - Имя", "Dude")
                 .fillField("Застрахованные - Дата рождения", "12.06.1990")
                 .fillField("Страхователь - Фамилия", "Петров")
                 .fillField("Страхователь - Имя", "Вася")
@@ -26,7 +31,7 @@ public class FirstTest extends BaseTests {
                 .fillField("Страхователь - Номер паспорта", "745602")
                 .fillField("Страхователь - Дата выдачи", "16.09.2019")
                 .fillField("Страхователь - Кем выдан", "Кемто")
-                .clickBtnContinue()
+                .clickContinueButton()
                 .checkErrorMessageAtField("Контакты - Мобильный телефон", "Поле не заполнено.")
                 .checkErrorMessageAtField("Контакты - Электронная почта", "Поле не заполнено.")
                 .checkErrorMessageAtField("Контакты - Повтор электронной почты", "Поле не заполнено.")

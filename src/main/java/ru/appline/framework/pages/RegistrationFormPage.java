@@ -6,10 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-/**
- * @author Arkadiy_Alaverdyan
- * Класс описывающий страничку оформления полиса страхования
- */
 public class RegistrationFormPage extends BasePage {
 
     @FindBy(id = "surname_vzr_ins_0")
@@ -162,7 +158,7 @@ public class RegistrationFormPage extends BasePage {
      * @return RegistrationFormPage - т.е. остаемся на этой странице
      */
     @Step("Кликаем по кнопке 'Продолжить'")
-    public RegistrationFormPage clickBtnContinue() {
+    public RegistrationFormPage clickContinueButton() {
         elementToBeClickable(btnContinue).click();
         return this;
     }

@@ -4,48 +4,40 @@ import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static ru.appline.framework.managers.DriverManager.getDriver;
 
-/**
- * @author Arkadiy_Alaverdyan
- * Класс описывающий страничку страхование путешественников
- */
 public class StrahovaniePage extends BasePage {
 
-    @FindBy(xpath = "//h1[contains(@class, 's-hero-banner')]")
-    WebElement pageTitle;
+    final String insuranceProgramXpath = "//h3[text()='%s']";
 
-    final String pageTitleLocator = "//h1[contains(@class, 's-hero-banner')]";
+    WebElement insuranceProgramElement;
 
-    @FindBy(xpath = "//a[text() = 'Оформить онлайн' and contains(@class, 's-hero-banner')]")
-    WebElement checkoutOnlineButton;
-
-    final String insuranceProgram = "//div[normalize-space()='%s']/div";
-    final String checkOutInsuranceProgram = "../following::div/a[text()='Оформить онлайн'][1]";
+    final String checkoutOnlineButtonXpath = "../../following-sibling::div//b[text()='Оформить онлайн']/..";
 
     /**
      * Проверка открытия страницы, путём проверки title страницы
      *
      * @return StrahovaniePage - т.е. остаемся на этой странице
      */
-    @Step("Проверка открытия страницы StrahovaniePage")
+    @Step("Проверка открытия страницы '{title}'")
     public StrahovaniePage checkOpenPage(String title) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(pageTitleLocator)));
-        wait.until(ExpectedConditions.visibilityOf(pageTitle));
         Assert.assertEquals("Заголовок отсутствует/не соответствует требуемому",
-                title, pageTitle.getText());
+                title, getDriver().getTitle());
         return this;
     }
 
-
+    /**
+     * Переход к выбранной программе страхования
+     *
+     * @return StrahovaniePage - т.е. остаемся на этой странице
+     */
+    @Step("Выбор программы страхования '{insuranceProgram}'")
     public StrahovaniePage selectInsuranceProgram(String insuranceProgram) {
-        WebElement program = getDriver().findElement(
-                By.xpath(String.format(this.insuranceProgram, insuranceProgram.replaceAll(" ", ""))));
-        scrollToElementJs(program);
-        elementToBeClickable(program.findElement(By.xpath(checkOutInsuranceProgram))).click();
+        insuranceProgramElement = getDriver().findElement(
+                By.xpath(String.format(insuranceProgramXpath, insuranceProgram))
+        );
+        scrollToElementJs(insuranceProgramElement);
         return this;
     }
 
@@ -53,12 +45,13 @@ public class StrahovaniePage extends BasePage {
     /**
      * Кликаем на кнопку "Оформить онлайн"
      *
-     * @return TarifPage - т.е. переходим на страницу {@link ru.appline.framework.pages.TarifPage}
+     * @return TarifPage - т.е. переходим на страницу {@link TariffPage}
      */
     @Step("Кликаем по кнопке 'Оформить онлайн'")
-    public TarifPage clickBtnOformitOnline() {
-        scrollToElementJs(checkoutOnlineButton);
-        elementToBeClickable(checkoutOnlineButton).click();
+    public TariffPage clickCheckoutButton() {
+        WebElement checkoutOnlineButton = insuranceProgramElement.findElement(By.xpath(checkoutOnlineButtonXpath));
+        elementToBeClickable(checkoutOnlineButton);
+        checkoutOnlineButton.click();
         return app.getTarifPage();
     }
 
