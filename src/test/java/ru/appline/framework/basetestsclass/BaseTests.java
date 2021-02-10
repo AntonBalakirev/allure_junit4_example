@@ -5,6 +5,8 @@ import org.junit.Before;
 import ru.appline.framework.managers.InitManager;
 import ru.appline.framework.managers.ManagerPages;
 
+import static ru.appline.framework.utils.MyAllureListener.addScreenshot;
+
 public class BaseTests {
 
     /**
@@ -20,6 +22,7 @@ public class BaseTests {
 
     @After
     public void afterEach() {
+        addScreenshot();
         InitManager.quitFramework();
     }
 }
